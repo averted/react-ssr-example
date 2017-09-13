@@ -7,3 +7,6 @@ npm-debug.log
 Thumbs.db
 Desktop.ini
 .*.sw[a-z]
+
+# build
+.build
