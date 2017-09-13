@@ -1,0 +1,26 @@
+{
+  "name": "react-ssr-example",
+  "version": "1.0.0",
+  "description": "React SSR Example",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/averted/react-ssr-example.git"
+  },
+  "author": "Alexander Vitiuk <averted>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/averted/react-ssr-example/issues"
+  },
+  "homepage": "https://github.com/averted/react-ssr-example#readme",
+  "dependencies": {
+    "express": "4.15.4",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
+    "react-router": "3.0.5",
+    "webpack": "3.5.4"
+  }
+}
