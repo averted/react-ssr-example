@@ -14,23 +14,17 @@ const routes = {
     { path: 'about', component: About },
     {
       path: 'redirect',
-      onEnter: function(state, replace) {
-        replace('/about')
-      }
+      onEnter: (state, replace) => replace('/about')
     },
   ]
 }
 
-app.get('*', function(req, res) {
+app.get('*', (req, res) => {
   Router.match({
     routes: routes,
     location: req.url
-  }, (
-    err,
-    redirect,
-    params
-  ) => {
-    let html
+  }, (err, redirect, params) => {
+    let markup
     let status = 200
 
     if (redirect) {
@@ -38,7 +32,7 @@ app.get('*', function(req, res) {
     }
 
     if (params) {
-      html = ReactDOM.renderToString(
+      markup = ReactDOM.renderToString(
         React.createElement(
           Router.RouterContext,
           Object.assign({}, params)
@@ -46,15 +40,22 @@ app.get('*', function(req, res) {
       )
     } else {
       status = 404
-      html = ReactDOM.renderToString(
+      markup = ReactDOM.renderToString(
         React.createElement('div', {}, 'NOT FOUND')
       )
     }
 
-    res.status(status).send(html)
+    res.status(status).send(`
+      <!doctype html>
+        <head>
+          <title>SSR Example</title>
+        </head>
+        <body>${markup}<body>
+      </html>
+    `)
   })
 })
 
-app.listen(3090, function() {
+app.listen(3090, () => {
   console.log('SSR example started on port 3090')
 })
