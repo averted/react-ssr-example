@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const React = require('react')
 const ReactDOM = require('react-dom/server')
@@ -6,6 +7,7 @@ const App = require('./src/App')
 const About = require('./src/About')
 
 const app = express()
+const SERVER_RENDERING = process.env.SERVER_RENDERING === 'on'
 
 const routes = {
   path: '/',
@@ -19,12 +21,17 @@ const routes = {
   ]
 }
 
+app.use('/public/', express.static(path.join(process.cwd(), '.build')))
 app.get('*', (req, res) => {
+  if (!SERVER_RENDERING) {
+    return res.sendFile(path.join(process.cwd(), '.build', 'index.html'))
+  }
+
   Router.match({
     routes: routes,
     location: req.url
   }, (err, redirect, params) => {
-    let markup
+    let markup = ''
     let status = 200
 
     if (redirect) {
@@ -47,10 +54,16 @@ app.get('*', (req, res) => {
 
     res.status(status).send(`
       <!doctype html>
+      <html>
         <head>
           <title>SSR Example</title>
         </head>
-        <body>${markup}<body>
+        <body>
+          <div id="app">
+            ${markup}
+          </div>
+          <script src="/public/app.js"></script>
+        <body>
       </html>
     `)
   })
