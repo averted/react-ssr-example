@@ -12,6 +12,12 @@ const routes = {
   component: App,
   childRoutes: [
     { path: 'about', component: About },
+    {
+      path: 'redirect',
+      onEnter: function(state, replace) {
+        replace('/about')
+      }
+    },
   ]
 }
 
