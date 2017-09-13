@@ -3,23 +3,10 @@ const express = require('express')
 const React = require('react')
 const ReactDOM = require('react-dom/server')
 const Router = require('react-router')
-const App = require('./src/App')
-const About = require('./src/About')
+const routes = require('./src/routes')
 
 const app = express()
 const SERVER_RENDERING = process.env.SERVER_RENDERING === 'on'
-
-const routes = {
-  path: '/',
-  component: App,
-  childRoutes: [
-    { path: 'about', component: About },
-    {
-      path: 'redirect',
-      onEnter: (state, replace) => replace('/about')
-    },
-  ]
-}
 
 app.use('/public/', express.static(path.join(process.cwd(), '.build')))
 app.get('*', (req, res) => {
@@ -28,7 +15,7 @@ app.get('*', (req, res) => {
   }
 
   Router.match({
-    routes: routes,
+    routes,
     location: req.url
   }, (err, redirect, params) => {
     let markup = ''
@@ -59,9 +46,7 @@ app.get('*', (req, res) => {
           <title>SSR Example</title>
         </head>
         <body>
-          <div id="app">
-            ${markup}
-          </div>
+          <div id="app">${markup}</div>
           <script src="/public/app.js"></script>
         <body>
       </html>
