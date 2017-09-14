@@ -45,7 +45,7 @@ app.get('*', (req, res) => {
         <head>
           <title>SSR Example</title>
         </head>
-        <body>
+        <body style="margin:0; padding:0;">
           <div id="app">${markup}</div>
           <script src="/public/app.js"></script>
         <body>
