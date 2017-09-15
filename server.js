@@ -8,10 +8,14 @@ const routes = require('./src/routes')
 const app = express()
 const SERVER_RENDERING = process.env.SERVER_RENDERING === 'on'
 
+const getDocument = (content) => {
+  return require('./document')(content)
+}
+
 app.use('/public/', express.static(path.join(process.cwd(), '.build')))
 app.get('*', (req, res) => {
   if (!SERVER_RENDERING) {
-    return res.sendFile(path.join(process.cwd(), '.build', 'index.html'))
+    return res.send(getDocument())
   }
 
   Router.match({
@@ -39,18 +43,7 @@ app.get('*', (req, res) => {
       )
     }
 
-    res.status(status).send(`
-      <!doctype html>
-      <html>
-        <head>
-          <title>SSR Example</title>
-        </head>
-        <body style="margin:0; padding:0;">
-          <div id="app">${markup}</div>
-          <script src="/public/app.js"></script>
-        <body>
-      </html>
-    `)
+    res.status(status).send(getDocument(markup))
   })
 })
 
